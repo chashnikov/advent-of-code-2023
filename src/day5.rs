@@ -4,7 +4,7 @@ use std::path::Path;
 use regex::Regex;
 
 pub fn day5() {
-    let content = fs::read_to_string(Path::new("5-full.txt")).expect("input must exist");
+    let content = fs::read_to_string(Path::new("5.txt")).expect("input must exist");
     let mut seeds : Vec<u64> = Vec::new();
     let mut mappings: Vec<Mapping> = Vec::new();
     let mut current = Mapping { ranges: Vec::new() };
@@ -26,11 +26,10 @@ pub fn day5() {
             let range = range_regex.captures(line).unwrap();
             let dest_start = range[1].parse().unwrap();
             let source_start = range[2].parse().unwrap();
-            let len = range[3].parse().unwrap();
-            current.ranges.push(Range {
-                dest_start,
-                source_start,
-                len,
+            let len : u64 = range[3].parse().unwrap();
+            current.ranges.push(RangeMapping {
+                source: Range { start: source_start, end: source_start + len },
+                dest: Range { start: dest_start, end: dest_start + len },
             });
         }
     });
@@ -45,22 +44,27 @@ pub fn day5() {
 
 #[derive(Clone)]
 struct Mapping {
-    ranges: Vec<Range>
+    ranges: Vec<RangeMapping>
+}
+
+#[derive(Clone)]
+struct RangeMapping {
+    source: Range,
+    dest: Range,
 }
 
 #[derive(Clone)]
 struct Range {
-    source_start: u64,
-    dest_start: u64,
-    len: u64,
+    start: u64,
+    end: u64,
 }
 
 fn map_num(mapping: &Mapping, source: u64) -> u64 {
     let range = mapping.ranges.iter().find(|r| {
-       r.source_start <= source && source < r.source_start + r.len
+       r.source.start <= source && source < r.source.end
     });
     match range {
         None => source,
-        Some(range) => range.dest_start + (source - range.source_start)
+        Some(range) => range.dest.start + (source - range.source.start)
     }
 }
