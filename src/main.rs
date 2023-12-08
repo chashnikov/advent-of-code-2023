@@ -1,9 +1,10 @@
-use crate::day2::day2;
+mod day3;
+mod day4;
+mod day5;
 
-mod day1;
-mod day2;
+use std::fs;
+use std::path::Path;
 
 fn main() {
-    day2()
+  day5::day5()
 }
-
