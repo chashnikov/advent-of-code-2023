@@ -8,10 +8,10 @@ pub fn day6() {
     let mut distances : Vec<u64> = Vec::new();
     content.lines().for_each(|line| {
         if line.starts_with("Time:") {
-            times = string_to_numbers(&line[5..]);
+            times = Vec::from([line[5..].chars().filter(|c| c.is_ascii_digit()).collect::<String>().parse::<u64>().unwrap()]);
         }
         else if line.starts_with("Distance:") {
-            distances = string_to_numbers(&line[9..])
+            distances = Vec::from([line[9..].chars().filter(|c| c.is_ascii_digit()).collect::<String>().parse::<u64>().unwrap()])
         }
     });
     let answer : u64 = times.iter().zip(distances.iter()).map(|(time, distance)| {
