@@ -45,8 +45,12 @@ enum Kind {
 }
 
 fn kind(cards: [char; 5]) -> Kind {
-    let counts : Vec<(char, usize)> = cards.iter().counts_by(identity).iter().sorted_by_key(|(_, v)| *v)
+    let mut counts : Vec<(char, usize)> = cards.iter().filter(|c| **c != 'J')
+        .counts_by(identity).iter().sorted_by_key(|(_, v)| *v)
         .rev().map(|(ch, count)| (**ch, *count)).collect();
+    let jokers = cards.iter().filter(|c| **c == 'J').count();
+    let first = if counts.is_empty() { ('J', 0) } else { counts.remove(0) };
+    counts.insert(0, (first.0, first.1 + jokers));
     let max_count = counts.first().unwrap().1;
     match counts.len() {
         1 => Five_of_a_kind,
@@ -61,7 +65,7 @@ fn rank(card: &char) -> u32 {
         'A' => 14,
         'K' => 13,
         'Q' => 12,
-        'J' => 11,
+        'J' => 1,
         'T' => 10,
         _ => card.to_digit(10).unwrap()
     }
