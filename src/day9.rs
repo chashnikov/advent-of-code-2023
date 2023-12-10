@@ -7,7 +7,8 @@ pub(crate) fn solve() {
 }
 
 fn find_next(line: &str) -> i64 {
-    let numbers = string_to_i64_numbers(line);
+    let mut numbers = string_to_i64_numbers(line);
+    numbers.reverse();
     return find_next_num(&numbers)
 }
 
