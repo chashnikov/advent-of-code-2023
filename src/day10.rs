@@ -1,5 +1,6 @@
 use std::{fmt, ops};
 use std::fmt::Formatter;
+use array2d::Array2D;
 use itertools::Itertools;
 use crate::read_to_string;
 
@@ -25,15 +26,38 @@ pub fn solve() {
     let mut prev = start;
     let mut current = next;
     let mut length = 0;
+    let height = grid.len();
+    let width = grid.first().unwrap().len();
+    let mut markers : Array2D<u32> = Array2D::filled_with(0, height, width);
     while current != start {
         let (d1, d2) = index(&grid, &current).unwrap();
+        let marker = if d1.dy <= 0 && d2.dy <= 0 {
+            2
+        } else {
+            1
+        };
+        markers[(current.y as usize, current.x as usize)] = marker;
         let next = current + supplemental(&(prev - current), &d1, &d2);
         prev = current;
         current = next;
         length += 1;
     }
-    let answer = (length+1)/2;
-    println!("{answer}");
+    let start_d1 = next - start;
+    let start_d2 = prev - start;
+    let start_marker = if start_d1.dy <= 0 && start_d2.dy <= 0 { 2 } else { 1 };
+    markers[(start.y as usize, start.x as usize)] = start_marker;
+    let mut inside = 0;
+    for y in 0..height {
+        let mut borders = 0;
+        for x in 0..width {
+            let marker = markers[(y, x)];
+            if marker == 0 && borders % 2 == 1 {
+                inside += 1;
+            }
+            borders += marker;
+        }
+    }
+    println!("{inside}");
 }
 
 fn char_to_tile(c: char) -> (Direction, Direction) {
