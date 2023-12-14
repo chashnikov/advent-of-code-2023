@@ -4,7 +4,7 @@ use std::fmt::Formatter;
 use std::path::Path;
 use regex::Regex;
 
-pub fn day5() {
+pub fn solve() {
     let content = fs::read_to_string(Path::new("5-full.txt")).expect("input must exist");
     let mut seeds : Vec<Range> = Vec::new();
     let mut mappings: Vec<Mapping> = Vec::new();

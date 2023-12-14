@@ -3,7 +3,7 @@ use std::fs;
 use std::path::Path;
 use regex::Regex;
 
-pub fn day4() {
+pub fn solve() {
     let content = fs::read_to_string(Path::new("4-full.txt")).expect("input must exist");
     let re = Regex::new(r"Card +\d+:(.*)\|(.*)").unwrap();
     let matches : Vec<u32> = content.lines().map(|line| {

@@ -1,7 +1,7 @@
 use std::fs;
 use std::path::Path;
 
-pub fn day2() {
+pub fn solve() {
     let string = fs::read_to_string(Path::new("2-full.txt")).expect("input exists");
     let games : Vec<Game> = string.lines().map(|line| { parse_game(line) }).collect();
     let answer : u64 = games.iter()

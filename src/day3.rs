@@ -1,7 +1,7 @@
 use std::fs;
 use std::path::Path;
 
-pub fn day3() {
+pub fn solve() {
     let content = fs::read_to_string(Path::new("3-full.txt")).expect("input must exist");
     let mut numbers: Vec<Number> = Vec::new();
     let mut gears: Vec<Coord> = Vec::new();

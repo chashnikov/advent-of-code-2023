@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::fs;
 use std::path::Path;
 
-pub fn day1() {
+pub fn solve() {
     let string = fs::read_to_string(Path::new("1.txt")).expect("input exists");
     let mut numbers: HashMap<String, u32> = HashMap::new();
     numbers.insert(String::from("one"), 1);

@@ -1,7 +1,7 @@
 use std::fs;
 use std::path::Path;
 
-pub fn day6() {
+pub fn solve() {
     let content = fs::read_to_string(Path::new("6-full.txt")).expect("input must exist");
     let mut times : Vec<u64> = Vec::new();
     let mut distances : Vec<u64> = Vec::new();

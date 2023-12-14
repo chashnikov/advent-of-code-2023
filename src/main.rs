@@ -16,12 +16,12 @@ mod day12;
 
 fn main() {
   match env::args().next().map(|s| s.parse::<i32>().unwrap_or(0)).unwrap_or(0) {
-    1 => day1::day1(),
-    2 => day2::day2(),
-    3 => day3::day3(),
-    4 => day4::day4(),
-    5 => day5::day5(),
-    6 => day6::day6(),
+    1 => day1::solve(),
+    2 => day2::solve(),
+    3 => day3::solve(),
+    4 => day4::solve(),
+    5 => day5::solve(),
+    6 => day6::solve(),
     7 => day7::solve(),
     8 => day8::solve(),
     9 => day9::solve(),
