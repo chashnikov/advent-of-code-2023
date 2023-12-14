@@ -11,9 +11,10 @@ mod day7;
 mod day8;
 mod day9;
 mod day10;
+mod day11;
 
 fn main() {
-  day10::solve()
+  day11::solve()
 }
 
 pub fn read_to_string(file_name: &str) -> String {
