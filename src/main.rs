@@ -1,4 +1,4 @@
-use std::fs;
+use std::{env, fs};
 use std::path::Path;
 
 mod day1;
@@ -15,7 +15,20 @@ mod day11;
 mod day12;
 
 fn main() {
-  day12::solve()
+  match env::args().next().map(|s| s.parse::<i32>().unwrap_or(0)).unwrap_or(0) {
+    1 => day1::day1(),
+    2 => day2::day2(),
+    3 => day3::day3(),
+    4 => day4::day4(),
+    5 => day5::day5(),
+    6 => day6::day6(),
+    7 => day7::solve(),
+    8 => day8::solve(),
+    9 => day9::solve(),
+    10 => day10::solve(),
+    11 => day11::solve(),
+    _ => day12::solve()
+  }
 }
 
 pub fn read_to_string(file_name: &str) -> String {

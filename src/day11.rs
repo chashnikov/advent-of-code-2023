@@ -1,6 +1,5 @@
 use std::fmt;
 use std::fmt::Formatter;
-use itertools::Itertools;
 use crate::read_to_string;
 
 pub fn solve() {

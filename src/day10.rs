@@ -25,7 +25,6 @@ pub fn solve() {
     }).unwrap();
     let mut prev = start;
     let mut current = next;
-    let mut length = 0;
     let height = grid.len();
     let width = grid.first().unwrap().len();
     let mut markers : Array2D<u32> = Array2D::filled_with(0, height, width);
@@ -40,7 +39,6 @@ pub fn solve() {
         let next = current + supplemental(&(prev - current), &d1, &d2);
         prev = current;
         current = next;
-        length += 1;
     }
     let start_d1 = next - start;
     let start_d2 = prev - start;

@@ -1,6 +1,5 @@
 use std::fs;
 use std::path::Path;
-use crate::string_to_numbers;
 
 pub fn day6() {
     let content = fs::read_to_string(Path::new("6-full.txt")).expect("input must exist");
@@ -16,7 +15,7 @@ pub fn day6() {
     });
     let answer : u64 = times.iter().zip(distances.iter()).map(|(time, distance)| {
         let d2 = time * time - distance * 4;
-        if (d2 <= 0) {
+        if d2 <= 0 {
             0
         }
         else {

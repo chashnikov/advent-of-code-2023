@@ -1,7 +1,7 @@
 use std::collections::HashSet;
 use std::fs;
 use std::path::Path;
-use regex::{Captures, Regex};
+use regex::Regex;
 
 pub fn day4() {
     let content = fs::read_to_string(Path::new("4-full.txt")).expect("input must exist");

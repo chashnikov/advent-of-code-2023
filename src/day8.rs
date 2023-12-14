@@ -29,7 +29,7 @@ pub fn solve() {
         next_index.push(indexes[&right[node]]);
     }
 
-    let mut answer : u64 = 0;
+    let answer : u64 = 0;
     let initial_count = nodes.iter().find_position(|k| k.chars().last().unwrap() != 'A').unwrap().0;
     let target = nodes.iter().find_position(|k| k.chars().last().unwrap() == 'Z').unwrap().0;
     let cycles : Vec<Cycle> = (0..initial_count).map(|i| find_cycle(i, &route, &next_index, target)).collect();

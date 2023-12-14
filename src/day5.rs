@@ -1,7 +1,6 @@
 use std::cmp::{max, min};
 use std::{fmt, fs};
-use std::fmt::{format, Formatter, write};
-use std::iter::Map;
+use std::fmt::Formatter;
 use std::path::Path;
 use regex::Regex;
 
@@ -69,16 +68,6 @@ struct RangeMapping {
 struct Range {
     start: i64,
     end: i64,
-}
-
-fn map_num(mapping: &Mapping, source: i64) -> i64 {
-    let range = mapping.ranges.iter().find(|r| {
-       r.source.start <= source && source < r.source.end
-    });
-    match range {
-        None => source,
-        Some(range) => range.dest.start + (source - range.source.start)
-    }
 }
 
 fn map_range(mapping: &Mapping, source: &Range) -> Vec<Range> {

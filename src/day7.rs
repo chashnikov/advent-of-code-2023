@@ -1,8 +1,7 @@
 use std::convert::identity;
-use regex::Regex;
 use crate::read_to_string;
 use itertools::Itertools;
-use crate::day7::Kind::{Five_of_a_kind, Four_of_a_kind, Full_house, High_card, One_pair, Three_of_a_kind, Two_pair};
+use crate::day7::Kind::{FiveOfAKind, FourOfAKind, FullHouse, HighCard, OnePair, ThreeOfAKind, TwoPair};
 
 
 pub fn solve() {
@@ -35,13 +34,13 @@ struct Hand {
 
 #[derive(PartialOrd, Ord, PartialEq, Eq)]
 enum Kind {
-    Five_of_a_kind, // all five cards have the same label: AAAAA
-    Four_of_a_kind, // four cards have the same label and one card has a different label: AA8AA
-    Full_house, // three cards have the same label, and the remaining two cards share a different label: 23332
-    Three_of_a_kind, // three cards have the same label, and the remaining two cards are each different from any other card in the hand: TTT98
-    Two_pair, // two cards share one label, two other cards share a second label, and the remaining card has a third label: 23432
-    One_pair, // two cards share one label, and the other three cards have a different label from the pair and each other: A23A4
-    High_card
+    FiveOfAKind, // all five cards have the same label: AAAAA
+    FourOfAKind, // four cards have the same label and one card has a different label: AA8AA
+    FullHouse, // three cards have the same label, and the remaining two cards share a different label: 23332
+    ThreeOfAKind, // three cards have the same label, and the remaining two cards are each different from any other card in the hand: TTT98
+    TwoPair, // two cards share one label, two other cards share a second label, and the remaining card has a third label: 23432
+    OnePair, // two cards share one label, and the other three cards have a different label from the pair and each other: A23A4
+    HighCard
 }
 
 fn kind(cards: [char; 5]) -> Kind {
@@ -53,11 +52,11 @@ fn kind(cards: [char; 5]) -> Kind {
     counts.insert(0, (first.0, first.1 + jokers));
     let max_count = counts.first().unwrap().1;
     match counts.len() {
-        1 => Five_of_a_kind,
-        2 => if max_count == 4 { Four_of_a_kind } else { Full_house },
-        3 => if max_count == 3 { Three_of_a_kind } else { Two_pair },
-        4 => One_pair,
-        _ => High_card
+        1 => FiveOfAKind,
+        2 => if max_count == 4 { FourOfAKind } else { FullHouse },
+        3 => if max_count == 3 { ThreeOfAKind } else { TwoPair },
+        4 => OnePair,
+        _ => HighCard
     }
 }
 fn rank(card: &char) -> u32 {

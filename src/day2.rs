@@ -15,7 +15,6 @@ pub fn day2() {
 }
 
 struct Game {
-    id: u64,
     bags: Vec<Bag>
 }
 
@@ -28,7 +27,6 @@ struct Bag {
 fn parse_game(line: &str) -> Game {
     let colon = line.find(':').expect(": must be found");
     Game {
-        id: line[5..colon].parse().unwrap(),
         bags: line[colon+2..].split("; ").map(|bag| { parse_bag(bag) }).collect()
     }
 }
