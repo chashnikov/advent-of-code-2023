@@ -10,8 +10,9 @@ pub fn solve() {
 
 fn number_of_arrangements(line: &str) -> u64 {
     let (pattern_original, numbers_string) = line.split_once(' ').unwrap();
-    let pattern = ".".to_owned() + pattern_original;
-    let numbers : Vec<u64> = numbers_string.split(',').map(|s| s.parse::<u64>().unwrap()).collect();
+    let pattern = ".".to_owned() + &(1..=5).map(|_| pattern_original).join("?");
+    let original_numbers : Vec<u64> = numbers_string.split(',').map(|s| s.parse::<u64>().unwrap()).collect();
+    let numbers = (1..=5).flat_map(|_| original_numbers.clone()).collect_vec();
     let mut result: Array2D<u64> = Array2D::filled_with(0, pattern.len(), 1 + numbers.len());
     let pattern_chars : Vec<char> = pattern.chars().collect_vec();
     result[(0, 0)] = 1;
@@ -36,6 +37,6 @@ fn number_of_arrangements(line: &str) -> u64 {
         }
     }
     let total = result[(pattern.len() - 1, numbers.len())];
-    println!("{}: {}", line, total);
+    println!("{}, {}: {}", pattern, numbers.iter().map(|n| n.to_string()).join(","), total);
     return total
 }
