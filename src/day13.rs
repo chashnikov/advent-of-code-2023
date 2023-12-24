@@ -34,11 +34,11 @@ fn reflections(lines: Vec<Vec<char>>) -> u64 {
     let mut result = 0_u64;
     for i in 1..lines.len() {
         // println!("Checking {i}:");
-        if (1..=min(i, lines.len() - i)).all(|j| {
-            let res = lines[i - j] == lines[i + j - 1];
+        if (1..=min(i, lines.len() - i)).map(|j| {
+            let res = lines[i - j].iter().zip(lines[i + j - 1].iter()).filter(|(c1, c2)| c1 != c2).count();
             // println!(" [{}] {} [{}]", i-j, if res { " == " } else { "!=" }, i+j-1);
             res
-        }) {
+        }).sum::<usize>() == 1 {
             result += i as u64;
         }
     }
