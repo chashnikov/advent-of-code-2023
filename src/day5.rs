@@ -1,11 +1,11 @@
 use std::cmp::{max, min};
-use std::{fmt, fs};
+use std::fmt;
 use std::fmt::Formatter;
-use std::path::Path;
 use regex::Regex;
+use crate::read_to_string;
 
 pub fn solve() {
-    let content = fs::read_to_string(Path::new("5-full.txt")).expect("input must exist");
+    let content = read_to_string("5-full.txt");
     let mut seeds : Vec<Range> = Vec::new();
     let mut mappings: Vec<Mapping> = Vec::new();
     let mut current = Mapping { ranges: Vec::new() };

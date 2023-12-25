@@ -1,8 +1,7 @@
-use std::fs;
-use std::path::Path;
+use crate::read_to_string;
 
 pub fn solve() {
-    let string = fs::read_to_string(Path::new("2-full.txt")).expect("input exists");
+    let string = read_to_string("2-full.txt");
     let games : Vec<Game> = string.lines().map(|line| { parse_game(line) }).collect();
     let answer : u64 = games.iter()
         .map(|game| {

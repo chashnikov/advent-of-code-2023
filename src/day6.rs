@@ -1,8 +1,7 @@
-use std::fs;
-use std::path::Path;
+use crate::read_to_string;
 
 pub fn solve() {
-    let content = fs::read_to_string(Path::new("6-full.txt")).expect("input must exist");
+    let content = read_to_string("6-full.txt");
     let mut times : Vec<u64> = Vec::new();
     let mut distances : Vec<u64> = Vec::new();
     content.lines().for_each(|line| {

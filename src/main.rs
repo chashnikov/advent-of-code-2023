@@ -45,7 +45,7 @@ fn main() {
 }
 
 pub fn read_to_string(file_name: &str) -> String {
-  fs::read_to_string(Path::new(file_name)).expect("input must exist")
+  fs::read_to_string(Path::new("inputs").join(file_name)).expect("input must exist")
 }
 
 pub fn string_to_grid(s: &str) -> Array2D<char> {

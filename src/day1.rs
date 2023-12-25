@@ -1,9 +1,8 @@
 use std::collections::HashMap;
-use std::fs;
-use std::path::Path;
+use crate::read_to_string;
 
 pub fn solve() {
-    let string = fs::read_to_string(Path::new("1.txt")).expect("input exists");
+    let string = read_to_string("1.txt");
     let mut numbers: HashMap<String, u32> = HashMap::new();
     numbers.insert(String::from("one"), 1);
     numbers.insert(String::from("two"), 2);

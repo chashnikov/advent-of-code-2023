@@ -1,10 +1,9 @@
 use std::collections::HashSet;
-use std::fs;
-use std::path::Path;
 use regex::Regex;
+use crate::read_to_string;
 
 pub fn solve() {
-    let content = fs::read_to_string(Path::new("4-full.txt")).expect("input must exist");
+    let content = read_to_string("4-full.txt");
     let re = Regex::new(r"Card +\d+:(.*)\|(.*)").unwrap();
     let matches : Vec<u32> = content.lines().map(|line| {
         let cap = re.captures(line).unwrap();

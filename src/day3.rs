@@ -1,8 +1,7 @@
-use std::fs;
-use std::path::Path;
+use crate::read_to_string;
 
 pub fn solve() {
-    let content = fs::read_to_string(Path::new("3-full.txt")).expect("input must exist");
+    let content = read_to_string("3-full.txt");
     let mut numbers: Vec<Number> = Vec::new();
     let mut gears: Vec<Coord> = Vec::new();
     content.lines().enumerate().for_each(|(y, line)| {
