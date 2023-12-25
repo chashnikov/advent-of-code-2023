@@ -20,6 +20,7 @@ mod day13;
 mod day14;
 mod day15;
 mod day16;
+mod day17;
 
 fn main() {
   match env::args().next().map(|s| s.parse::<i32>().unwrap_or(0)).unwrap_or(0) {
@@ -38,7 +39,8 @@ fn main() {
     13 => day13::solve(),
     14 => day14::solve(),
     15 => day15::solve(),
-    _ => day16::solve(),
+    16 => day16::solve(),
+    _ => day17::solve(),
   }
 }
 
@@ -58,7 +60,7 @@ pub fn string_to_i64_numbers(s: &str) -> Vec<i64> {
   s.split(" ").filter(|w| !w.is_empty()).map(|w| w.parse().unwrap()).collect()
 }
 
-#[derive(Copy, Clone, Eq, PartialEq)]
+#[derive(Copy, Clone, Eq, PartialEq, Hash)]
 pub struct Direction {
   dx: i32,
   dy: i32
@@ -69,7 +71,7 @@ pub const SOUTH: Direction = Direction { dx: 0, dy: 1 };
 pub const EAST: Direction = Direction { dx: 1, dy: 0 };
 pub const WEST: Direction = Direction { dx: -1, dy: 0 };
 
-#[derive(Copy, Clone, Eq, PartialEq)]
+#[derive(Copy, Clone, Eq, PartialEq, Hash)]
 struct PositionI32 {
   x: i32,
   y: i32
@@ -81,6 +83,15 @@ impl ops::Add<Direction> for PositionI32 {
     PositionI32 {
       x: self.x + rhs.dx,
       y: self.y + rhs.dy
+    }
+  }
+}
+
+impl Direction {
+  fn opposite(self) -> Direction {
+    Direction {
+      dx: -self.dx,
+      dy: -self.dy,
     }
   }
 }
@@ -106,3 +117,6 @@ impl fmt::Display for Direction {
     write!(f, "({}, {})", self.dx, self.dy)
   }
 }
+
+pub const DIRECTIONS: [Direction; 4] = [EAST, NORTH, WEST, SOUTH];
+

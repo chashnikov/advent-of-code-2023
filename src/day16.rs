@@ -1,6 +1,6 @@
 use array2d::Array2D;
 use itertools::Itertools;
-use crate::{Direction, EAST, NORTH, PositionI32, read_to_string, SOUTH, string_to_grid, WEST};
+use crate::{Direction, DIRECTIONS, EAST, NORTH, PositionI32, read_to_string, SOUTH, string_to_grid, WEST};
 
 pub fn solve() {
     let content = read_to_string("16-full.txt");
@@ -63,8 +63,6 @@ fn count_energized(grid: &Array2D<char>, initial: &Beam) -> u32 {
     let answer: u32 = processed.rows_iter().map(|row| row.filter(|w| **w != 0).count() as u32).sum();
     answer
 }
-
-const DIRECTIONS: [Direction; 4] = [EAST, NORTH, WEST, SOUTH];
 
 #[derive(Copy, Clone, Eq, PartialEq)]
 struct Beam {
