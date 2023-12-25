@@ -1,10 +1,10 @@
 use array2d::Array2D;
 use itertools::Itertools;
-use crate::read_to_string;
+use crate::{read_to_string, string_to_grid};
 
 pub fn solve() {
     let content = read_to_string("14-full.txt");
-    let initial_grid: Array2D<char> = Array2D::from_rows(content.lines().map(|line| line.chars().collect_vec()).collect_vec().as_slice()).expect("correct grid");
+    let initial_grid: Array2D<char> = string_to_grid(&content);
     let mut grid = initial_grid.clone();
     let mut grid_x2 = grid.clone();
     let mut cycles = 0_u64;
