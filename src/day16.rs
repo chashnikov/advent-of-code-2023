@@ -1,14 +1,31 @@
 use array2d::Array2D;
+use itertools::Itertools;
 use crate::{Direction, EAST, NORTH, PositionI32, read_to_string, SOUTH, string_to_grid, WEST};
 
 pub fn solve() {
     let content = read_to_string("16-full.txt");
     let grid: Array2D<char> = string_to_grid(&content);
-    let mut queue : Vec<Beam> = Vec::new();
+    let x_max = grid.num_columns();
+    let y_max = grid.num_rows();
+    let initial : Vec<Beam> = DIRECTIONS.iter().flat_map(|direction| {
+        match *direction {
+            EAST => (0..y_max).map(|y| Beam { position: PositionI32 { x: 0, y: y as i32 }, direction: *direction}).collect_vec(),
+            WEST => (0..y_max).map(|y| Beam { position: PositionI32 { x: (x_max - 1) as i32, y: y as i32 }, direction: *direction}).collect_vec(),
+            NORTH => (0..x_max).map(|x| Beam { position: PositionI32 { x: x as i32, y: (y_max - 1) as i32 }, direction: *direction}).collect_vec(),
+            SOUTH => (0..x_max).map(|x| Beam { position: PositionI32 { x: x as i32, y: 0 }, direction: *direction}).collect_vec(),
+            _ => panic!("unexpected direction {}", direction)
+        }
+    }).collect();
+    let answer = initial.iter().map(|beam| count_energized(&grid, beam)).max().unwrap();
+    println!("{answer}");
+}
+
+fn count_energized(grid: &Array2D<char>, initial: &Beam) -> u32 {
+    let mut queue: Vec<Beam> = Vec::new();
     let mut processed: Array2D<u8> = Array2D::filled_with(0, grid.num_rows(), grid.num_columns());
     let x_max = grid.num_columns();
     let y_max = grid.num_rows();
-    queue.push(Beam { position: PositionI32{ x: 0, y: 0}, direction: EAST});
+    queue.push((*initial).clone());
     while !queue.is_empty() {
         let beam = queue.pop().unwrap();
         if beam.position.x < 0 || beam.position.x >= x_max as i32 || beam.position.y < 0 || beam.position.y >= y_max as i32 {
@@ -43,11 +60,13 @@ pub fn solve() {
         }
     }
     print_grid(&processed);
-    let answer : u32 = processed.rows_iter().map(|row| row.filter(|w| **w != 0).count() as u32).sum();
-    println!("{answer}");
+    let answer: u32 = processed.rows_iter().map(|row| row.filter(|w| **w != 0).count() as u32).sum();
+    answer
 }
 
 const DIRECTIONS: [Direction; 4] = [EAST, NORTH, WEST, SOUTH];
+
+#[derive(Copy, Clone, Eq, PartialEq)]
 struct Beam {
     position: PositionI32,
     direction: Direction,
