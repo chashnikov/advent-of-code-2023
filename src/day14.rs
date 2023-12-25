@@ -4,7 +4,7 @@ use crate::read_to_string;
 
 pub fn solve() {
     let content = read_to_string("14-full.txt");
-    let mut initial_grid: Array2D<char> = Array2D::from_rows(content.lines().map(|line| line.chars().collect_vec()).collect_vec().as_slice()).expect("correct grid");
+    let initial_grid: Array2D<char> = Array2D::from_rows(content.lines().map(|line| line.chars().collect_vec()).collect_vec().as_slice()).expect("correct grid");
     let mut grid = initial_grid.clone();
     let mut grid_x2 = grid.clone();
     let mut cycles = 0_u64;
@@ -28,7 +28,7 @@ pub fn solve() {
 
     let total = 1_000_000_000;
     let remaining = total - cycles;
-    for i in 1..=(remaining % cycles) {
+    for _ in 1..=(remaining % cycles) {
         cycle(&mut grid);
     }
     let answer : u64 = grid_load(&grid);
@@ -43,6 +43,7 @@ fn column_load(column: &Vec<&char>) -> u64 {
     return column.iter().enumerate().filter(|(_, c)| ***c == 'O').map(|(i, _)| (column.len() - i) as u64).sum();
 }
 
+#[allow(dead_code)]
 fn print_grid(grid: &Array2D<char>) {
     grid.rows_iter().for_each(|line| {
         println!("{}", line.collect::<String>())
