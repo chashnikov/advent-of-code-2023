@@ -100,3 +100,9 @@ impl fmt::Display for PositionI32 {
     write!(f, "({}, {})", self.x, self.y)
   }
 }
+
+impl fmt::Display for Direction {
+  fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+    write!(f, "({}, {})", self.dx, self.dy)
+  }
+}
