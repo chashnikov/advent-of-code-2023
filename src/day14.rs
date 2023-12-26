@@ -43,14 +43,6 @@ fn column_load(column: &Vec<&char>) -> u64 {
     return column.iter().enumerate().filter(|(_, c)| ***c == 'O').map(|(i, _)| (column.len() - i) as u64).sum();
 }
 
-#[allow(dead_code)]
-fn print_grid(grid: &Array2D<char>) {
-    grid.rows_iter().for_each(|line| {
-        println!("{}", line.collect::<String>())
-    });
-    println!("Load: {}", grid_load(grid))
-}
-
 fn cycle(grid: &mut Array2D<char>) {
     tilt(grid, 0, -1);
     // print_grid(&grid);

@@ -21,6 +21,7 @@ mod day14;
 mod day15;
 mod day16;
 mod day17;
+mod day18;
 
 fn main() {
   match env::args().next().map(|s| s.parse::<i32>().unwrap_or(0)).unwrap_or(0) {
@@ -40,7 +41,8 @@ fn main() {
     14 => day14::solve(),
     15 => day15::solve(),
     16 => day16::solve(),
-    _ => day17::solve(),
+    17 => day17::solve(),
+    _ => day18::solve(),
   }
 }
 
@@ -87,11 +89,29 @@ impl ops::Add<Direction> for PositionI32 {
   }
 }
 
+impl ops::Mul<i32> for Direction {
+  type Output = Direction;
+
+  fn mul(self, rhs: i32) -> Self::Output {
+    Direction {
+      dx: self.dx*rhs,
+      dy: self.dy*rhs
+    }
+  }
+}
+
 impl Direction {
   fn opposite(self) -> Direction {
     Direction {
       dx: -self.dx,
       dy: -self.dy,
+    }
+  }
+
+  fn turn_right(self) -> Direction {
+    Direction {
+      dx: -self.dy,
+      dy: self.dx
     }
   }
 }
@@ -120,3 +140,9 @@ impl fmt::Display for Direction {
 
 pub const DIRECTIONS: [Direction; 4] = [EAST, NORTH, WEST, SOUTH];
 
+#[allow(dead_code)]
+fn print_grid(grid: &Array2D<char>) {
+  grid.rows_iter().for_each(|line| {
+    println!("{}", line.collect::<String>())
+  });
+}
