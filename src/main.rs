@@ -108,6 +108,7 @@ impl Direction {
     }
   }
 
+  #[allow(dead_code)]
   fn turn_right(self) -> Direction {
     Direction {
       dx: -self.dy,
