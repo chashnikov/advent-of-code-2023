@@ -2,7 +2,7 @@ use regex::Regex;
 use crate::{Direction, EAST, NORTH, PositionI32, read_to_string, SOUTH, WEST};
 
 pub fn solve() {
-    let content = read_to_string("18-min.txt");
+    let content = read_to_string("18.txt");
     let re = Regex::new(r"([A-Z]) +(\d+) +\(#[0-9a-f]+\)").unwrap();
     let mut moves : Vec<(Direction, u32)> = Vec::new();
     let mut positions : Vec<PositionI32> = Vec::new();
@@ -23,16 +23,29 @@ pub fn solve() {
     println!("({}, {}) x ({}, {})", x_min, x_max, y_min, y_max);
     let mut total = 0_i64;
     current = PositionI32 { x:0, y:0 };
-    for (direction, length) in moves {
-        let delta = match direction {
+    for (i, (direction, length)) in moves.iter().enumerate() {
+        let delta = match *direction {
             NORTH =>  (x_max + 1 - current.x) - (current.x - x_min),
             EAST => (y_max + 1 - current.y) - (current.y - y_min),
             SOUTH => (current.x + 1 - x_min) - (x_max - current.x),
             WEST => (current.y + 1 - y_min) - (y_max - current.y),
             _ => panic!("unknown direction {}", direction)
         };
-        total += delta as i64 * (length as i64 + 1);
-        current = current + direction * length as i32;
+        total += delta as i64 * (*length as i64);
+        current = current + *direction * *length as i32;
+        let next_direction = moves[(i+1) % moves.len()].0;
+        if next_direction == *direction {
+            total += 2;
+        }
+        else if next_direction == direction.opposite() {
+            panic!("turn around at move {}", i);
+        }
+        else if next_direction == direction.turn_right() {
+            total += 3;
+        }
+        else {
+            total += 1;
+        }
     }
     let answer = total / 4;
     println!("{answer}");
