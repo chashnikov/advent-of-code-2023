@@ -1,3 +1,4 @@
+use std::cmp::{max, min};
 use std::collections::HashMap;
 use itertools::Itertools;
 use regex::Regex;
@@ -21,34 +22,40 @@ pub fn solve() {
             parts.push(parse_part(line));
         }
     });
-    let answer: u32 = parts.iter()
-        .filter(|part| is_accepted(part, &workflows))
-        .map(|part| {
-            part.iter().sum::<u32>()
-        })
-        .sum();
-    println!("{answer}")
-}
 
-fn is_accepted(part: &Part, workflows: &HashMap<String, Workflow>) -> bool {
-    let mut current = "in";
-    loop {
-        let workflow = workflows.get(current).expect(format!("unknown workflow {}", current).as_str());
-        let mut found = false;
+    let mut total_accepted = 0_u64;
+    let mut queue : Vec<(Ranges, String)> = Vec::new();
+    queue.push(([(1,4000); 4], String::from("in")));
+    while !queue.is_empty() {
+        let (ranges, workflow) = queue.pop().unwrap();
+        let workflow = workflows.get(&workflow).expect("unknown workflow");
+        let mut current = Some(ranges);
         for rule in &workflow.rules {
-            let next = next_rule(part, rule);
-            if let Some(next) = next {
-                current = next;
-                found = true;
+            let (accepted, rejected) = split_range(&current.unwrap(), &rule);
+            if let Some(accepted) = accepted {
+                if rule.destination == "A" {
+                    total_accepted += number_of_elements(&accepted)
+                }
+                else if rule.destination != "R" {
+                    queue.push((accepted, rule.destination.clone()));
+                }
+            }
+            current = rejected;
+            if current == None {
                 break;
             }
         }
-        if !found {
-            current = &workflow.last;
+        if let Some(accepted) = current {
+            if workflow.last == "A" {
+                total_accepted += number_of_elements(&accepted)
+            }
+            else if workflow.last != "R" {
+                queue.push((accepted, workflow.last.clone()));
+            }
         }
-        if current == "A" { return true; }
-        if current == "R" { return false; }
     }
+
+    println!("{total_accepted}")
 }
 
 fn parse_part(line: &str) -> Part {
@@ -89,17 +96,38 @@ fn parse_operation(s: &str) -> Comparison {
     }
 }
 
-fn next_rule<'a>(part: &Part, rule: &'a Rule) -> Option<&'a String> {
-    let v = part[rule.i];
-    let matches = match rule.operation {
-        LESS => v < rule.value,
-        GREATER => v > rule.value,
+fn number_of_elements(ranges: &Ranges) -> u64 {
+    ranges.map(|(a, b)| b - a + 1).iter().map(|w| *w as u64 ).product()
+}
+
+fn split_range(ranges: &Ranges, rule: &Rule) -> (Option<Ranges>, Option<Ranges>) {
+    let (a, b) = ranges[rule.i];
+    let accepted = match rule.operation {
+        LESS => if a < rule.value { Some((a, min(b, rule.value-1))) } else { None }
+        GREATER => if b > rule.value { Some((max(a, rule.value+1), b)) } else { None },
     };
-    if matches { Some(&rule.destination) } else { None }
+    let rejected = match rule.operation {
+        LESS => if b >= rule.value { Some((max(a, rule.value), b)) } else { None }
+        GREATER => if a <= rule.value { Some((a, min(b, rule.value))) } else { None },
+    };
+    let accepted_ranges = accepted.map(|r| {
+        let mut new_ranges = ranges.clone();
+        new_ranges[rule.i] = r;
+        new_ranges
+    });
+    let rejected_ranges = rejected.map(|r| {
+        let mut new_ranges = ranges.clone();
+        new_ranges[rule.i] = r;
+        new_ranges
+    });
+    (accepted_ranges, rejected_ranges)
 }
 
 const PARTS: &str = "xmas";
 type Part = [u32; 4];
+
+type Ranges = [(u32, u32); 4];
+
 struct Workflow {
     name: String,
     rules: Vec<Rule>,
