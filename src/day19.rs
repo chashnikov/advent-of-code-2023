@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use itertools::Itertools;
 use regex::Regex;
-use crate::day19::Comparison::{EQUAL, GREATER, LESS};
+use crate::day19::Comparison::{GREATER, LESS};
 use crate::read_to_string;
 
 pub fn solve() {
@@ -85,7 +85,6 @@ fn parse_operation(s: &str) -> Comparison {
     match s {
         "<" => LESS,
         ">" => GREATER,
-        "=" => EQUAL,
         _ => panic!("unexpected operation {}", s)
     }
 }
@@ -95,7 +94,6 @@ fn next_rule<'a>(part: &Part, rule: &'a Rule) -> Option<&'a String> {
     let matches = match rule.operation {
         LESS => v < rule.value,
         GREATER => v > rule.value,
-        EQUAL => v == rule.value
     };
     if matches { Some(&rule.destination) } else { None }
 }
@@ -109,7 +107,7 @@ struct Workflow {
 }
 
 enum Comparison {
-    LESS, GREATER, EQUAL
+    LESS, GREATER
 }
 struct Rule {
     i: usize,
