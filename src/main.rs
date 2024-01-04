@@ -24,6 +24,7 @@ mod day17;
 mod day18;
 mod day19;
 mod day20;
+mod day21;
 
 fn main() {
   match env::args().next().map(|s| s.parse::<i32>().unwrap_or(0)).unwrap_or(0) {
@@ -46,7 +47,8 @@ fn main() {
     17 => day17::solve(),
     18 => day18::solve(),
     19 => day19::solve(),
-    _ => day20::solve(),
+    20 => day20::solve(),
+    _ => day21::solve(),
   }
 }
 
