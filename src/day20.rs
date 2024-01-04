@@ -55,15 +55,23 @@ pub fn solve() {
     }
 
     let mut total = Pulses { low:0, high: 0};
-    for _ in 0..1000 {
-        let pulses = push_button(&mut modules);
+    let mut analysis = Analysis {
+        on: [Vec::new(), Vec::new(), Vec::new(), Vec::new()]
+    };
+    for count in 1..10000 {
+        let pulses = push_button(&mut modules, count, &mut analysis);
         total.low += pulses.low;
         total.high += pulses.high;
     }
-    println!("{}", total.low*total.high);
+    for i in 0..4 {
+        println!("[{i}]=1:");
+        for s in &analysis.on[i] {
+            println!("  {s}")
+        }
+    }
 }
 
-fn push_button(mut modules: &mut HashMap<String, Module>) -> Pulses {
+fn push_button(mut modules: &mut HashMap<String, Module>, count: u64, analysis: &mut Analysis) -> Pulses {
     let mut pulses = Pulses { low: 0, high: 0};
     let mut queue: VecDeque<(String, String, bool)> = VecDeque::new();
     queue.push_back(("BUTTON".to_string(), "broadcaster".to_string(), false));
@@ -75,12 +83,13 @@ fn push_button(mut modules: &mut HashMap<String, Module>) -> Pulses {
         else {
             pulses.low += 1;
         }
-        send(source, destination, pulse, &mut modules, &mut queue);
+        send(source, destination, pulse, &mut modules, &mut queue, count, analysis);
     }
     return pulses;
 }
 
-fn send(source: String, destination: String, pulse: bool, modules: &mut HashMap<String, Module>, queue: &mut VecDeque<(String, String, bool)>) {
+fn send(source: String, destination: String, pulse: bool, modules: &mut HashMap<String, Module>,
+        queue: &mut VecDeque<(String, String, bool)>, count: u64, analysis: &mut Analysis) {
     // println!("{source} -{pulse}-> {destination}");
     let module = if let Some(module) = modules.get_mut(&destination) {
         module
@@ -101,6 +110,14 @@ fn send(source: String, destination: String, pulse: bool, modules: &mut HashMap<
         },
         Module::Conjunction { inputs, destinations} => {
             inputs.insert(source, pulse);
+            if destination == "qn" {
+                inputs.iter().sorted_by_key(|e| e.0).enumerate().for_each(|(i, (_, value))| {
+                    if *value && analysis.on[i].last() != Some(&count) {
+                        analysis.on[i].push(count);
+                    }
+                });
+                // println!("{count} clicks: {}", inputs.values().map(|p| if *p { '1' } else { '0' }).collect::<String>())
+            }
             let next = !inputs.values().all(|p| *p);
             send_to_destinations(destination, destinations, next, queue);
         }
@@ -131,4 +148,8 @@ enum Module {
 struct Pulses {
     low: u64,
     high: u64,
+}
+
+struct Analysis {
+    on: [Vec<u64>; 4]
 }
