@@ -27,7 +27,8 @@ mod day20;
 mod day21;
 
 fn main() {
-  match env::args().next().map(|s| s.parse::<i32>().unwrap_or(0)).unwrap_or(0) {
+  let option = env::args().nth(1);
+  match option.map(|s| s.parse::<i32>().unwrap_or(0)).unwrap_or(0) {
     1 => day1::solve(),
     2 => day2::solve(),
     3 => day3::solve(),
