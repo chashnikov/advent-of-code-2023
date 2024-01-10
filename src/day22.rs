@@ -42,10 +42,22 @@ pub fn solve() {
             }
         }
     });
-    let answer = (0..bricks.len()).filter(|i| {
-        supported_by.iter().all(|(_, ids)| *ids != vec![*i])
-    }).count();
+    let answer : u32 = (0..bricks.len()).map(|i| {
+        will_fall(i, &supported_by)
+    }).sum();
     println!("{answer}");
+}
+
+fn will_fall(i: usize, supported_by: &HashMap<usize, Vec<usize>>) -> u32 {
+    let mut disappeared : Vec<bool> = (0..supported_by.len()).map(|_| false).collect_vec();
+    disappeared[i] = true;
+    for j in i+1 .. supported_by.len() {
+        let lies_on = supported_by.get(&j).unwrap();
+        disappeared[j] = lies_on.len() > 0 && lies_on.iter().all(|k| disappeared[*k]);
+    }
+    let mut result = (i+1 .. supported_by.len()).filter(|j| disappeared[*j]).count();
+    println!("{i} -> {result} will fall");
+    result as u32
 }
 
 #[derive(Copy, Clone, Eq, PartialEq, Hash, Debug)]
