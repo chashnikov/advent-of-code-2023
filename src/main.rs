@@ -52,7 +52,10 @@ fn main() {
     18 => day18::solve(),
     19 => day19::solve(),
     20 => day20::solve(),
-    _ => day21::solve(),
+    21 => day21::solve(),
+    22 => day22::solve(),
+    23 => day23::solve(),
+    _ => day24::solve(),
   }
 }
 
